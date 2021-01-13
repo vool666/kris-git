@@ -39,6 +39,8 @@ public class Lesson1 {
     // Defineeri String tüüpi muutuja mille sisu oleks "\"\\""
     // Trüki muutuja sisu välja
     public static void excersie4(){
+        String x = "\"\\\"\\\\\"\"";
+        System.out.println(x);
     }
 
 }
