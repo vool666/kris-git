@@ -2,6 +2,7 @@ package ee.bcs.valiit.tasks;
 
 public class Lesson3 {
     public static void main(String[] args) {
+        nthPower(new int[]{1, 2, 3, 4, 5}, 5);
         //sum(new int[] {1,2,3});
         //isPrime(9);
         //reverseString("Tere");
@@ -37,10 +38,16 @@ public class Lesson3 {
     public static int[] sort(int[] a) {
         // TODO sorteeri massiiv suuruse järgi.
         // TODO kasuta tsükleid, ära kasuta ühtegi olemasolevat sort funktsiooni
-
-
-        return new int[0];
-
+        for (int j = 0; j < a.length; j++) {
+            for (int i = 0; i < a.length; i++) {
+                if (a[i] > a[i + 1]) {
+                    int tmp = a[i];
+                    a[i] = a[i + 1];
+                    a[i + 1] = tmp;
+                }
+            }
+        }
+        return a;
     }
 
     public static String reverseString(String a) { //Stringi ei saa niisama ümber pöörata, küll on see võimekus StringBuilderi classil. Seega teisendad selleks.
@@ -65,6 +72,24 @@ public class Lesson3 {
             System.out.println(x + " on primaararv.");
         else
             System.out.println(x + " ei ole primaararv.");
-    return false;
+        return false;
+    }
+
+
+    public static int nthPower(int[] array, int n) {
+        if (n >= array.length) {
+            return -1;
+        } else {
+            double d = (Math.pow(array[n], n));
+            int i = (int) d;
+            System.out.println(i);
+            return i;
+        }
+    }
+
+    public static int howOld(final String herOld) {
+        String vanusString = herOld.substring(0,1);
+        int vanus = Integer.parseInt(vanusString);
+        return vanus;
     }
 }

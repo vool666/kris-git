@@ -1,13 +1,10 @@
 package ee.bcs.valiit.tasks;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 public class Lesson2 {
 
     public static void main(String[] args) {
-        System.out.println(exercise4(4));
     }
 
     // TODO loo 10 elemendile täisarvude massiv
@@ -66,11 +63,11 @@ public class Lesson2 {
     public static int exercise4(int n) {
 
         if (n == 0 || n == 1) {
-         return n;
+            return n;
         } else {
             int a = 0;
             int b = 1;
-            for (int i = 1; i < n; i++){
+            for (int i = 1; i < n; i++) {
                 int tmp = a;
                 a = b;
                 b = b + tmp;
@@ -78,28 +75,30 @@ public class Lesson2 {
             return b;
         }
 
-        }
+    }
 
 
     public static void exercise5(int i, int j) {
-    // https://onlinejudge.org/index.php?option=onlinejudge&Itemid=8&page=show_problem&problem=36
-    // TODO 1 (tee alamfunktsioon) mis leiab 3n+1 sequenci pikkuse
-    // kui on paaris / 2 kui on paaritu *3+1
-    // TODO 2 tee tsükkel mis leiab i -> j kõige suurema tsükkli pikkuse
+        // https://onlinejudge.org/index.php?option=onlinejudge&Itemid=8&page=show_problem&problem=36
+        // TODO 1 (tee alamfunktsioon) mis leiab 3n+1 sequenci pikkuse
+        // kui on paaris / 2 kui on paaritu *3+1
+        // TODO 2 tee tsükkel mis leiab i -> j kõige suurema tsükkli pikkuse
 
-}
+    }
 
-public static int seqLength(int n) {
-    int count = 1;
-    while (n > 1){
-        count++;
-        if(n%2 == 0) {
-            n = n / 2;
-        } else {
-            n = n*3 + 1;
+    public static int seqLength(int n) {
+        int count = 1;
+        while (n > 1) {
+            count++;
+            if (n % 2 == 0) {
+                n = n / 2;
+            } else {
+                n = n * 3 + 1;
+            }
         }
+        return count;
     }
-    return count;
-    }
+
+
 }
 
