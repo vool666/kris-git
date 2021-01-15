@@ -30,12 +30,11 @@ public class Lesson4 {
                 if (x == null) {
                     System.out.println("Sellist kontot ei ole.");
                 } else {
-                    System.out.println("Teie konto balanss on " + x);
+                    System.out.println("Teie konto balanss on " + x + " eurot.");
                 }
             } else if (arr[0].equalsIgnoreCase("depositMoney")) {
                 BigDecimal x = new BigDecimal(arr[2]);
                 BigDecimal y = accountBalanceMap.get(arr[1]);
-                ;
                 MathContext mc = new MathContext(4);
                 int comp = (x.compareTo(BigDecimal.ZERO));
                 if (comp == -1) {
@@ -44,6 +43,7 @@ public class Lesson4 {
                     System.out.println("Sellist kontot ei ole.");
                 } else {
                     accountBalanceMap.put(arr[1], (x.add(y, mc)));
+                    System.out.println("Teie kontole lisati " + x + " eurot.");
                 }
             } else if (arr[0].equalsIgnoreCase("withdrawMoney")) {
                 BigDecimal x = new BigDecimal(arr[2]); // raha väärtus
@@ -59,6 +59,7 @@ public class Lesson4 {
                     System.out.println("Kontolt ei saa nii palju raha välja võtta- rahalised vahendid puuduvad.");
                 } else {
                     accountBalanceMap.put(arr[1], (y.subtract(x, mc)));
+                    System.out.println("Teie kontolt võeti välja " + x + " eurot.");
                 }
             } else if (arr[0].equalsIgnoreCase("transfer")) {
                 BigDecimal x = new BigDecimal(arr[3]); //number, mida hakatakse liitma ühele kontole ja lahutama teiselt
@@ -74,11 +75,11 @@ public class Lesson4 {
                 } else if (z == null) {
                     System.out.println("Kontot, millele soovite raha kanda, ei ole olemas.");
                 } else if (comp2 == 1) {
-                    System.out.println("Kontolt ei saa nii palju raha välja võtta- rahalised vahendid puuduvad.");
+                    System.out.println("Kontolt ei saa nii palju raha edastada- rahalised vahendid puuduvad.");
                 } else {
                     accountBalanceMap.put(arr[1], (y.subtract(x, mc)));
                     accountBalanceMap.put(arr[2], (z.add(x, mc)));
-                    System.out.println("Makse õnnestus.");
+                    System.out.println("Makse õnnestus. Te kandsite " + x + " eurot kontolt " + y + " kontole " + z + ".");
                 }
 
             }
