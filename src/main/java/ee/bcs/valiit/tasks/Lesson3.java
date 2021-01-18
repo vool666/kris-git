@@ -14,7 +14,7 @@ public class Lesson3 {
         // Todo liida kokku kõik numbrid massivis x
         int sum = 0;
         for (int i = 0; i <= x.length; i++) {
-            sum = sum + i;
+            sum = sum + x[i];
             System.out.print(sum); //midagi valesti?
         }
 
@@ -57,7 +57,8 @@ public class Lesson3 {
         tagurpidi.append(a);  // append kasutatakse Strinbuilderile nimega tagurpidi väärtuse andmiseks, ehk anname väärtuse mis main methodis (a) sisse kirjutame.
         tagurpidi = tagurpidi.reverse();
         System.out.println(tagurpidi);
-        return "";
+        String tagasi = tagurpidi.toString();
+        return tagasi;
     }
 
     public static boolean isPrime(int x) {
@@ -69,11 +70,12 @@ public class Lesson3 {
                 break;                      // kohe kui on true, breakid loopi.
             }
         }
-        if (!kasOn)
+        if (!kasOn) {
             System.out.println(x + " on primaararv.");
-        else
+        return true; }
+        else {
             System.out.println(x + " ei ole primaararv.");
-        return false;
+        return false;}
     }
 
 
