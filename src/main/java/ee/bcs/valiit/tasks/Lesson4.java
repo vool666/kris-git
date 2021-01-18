@@ -25,6 +25,7 @@ public class Lesson4 {
                 break;
             } else if (arr[0].equalsIgnoreCase("createAccount")) {
                 accountBalanceMap.put(arr[1], BigDecimal.ZERO);
+                System.out.println("Konto nr " + arr[1] + " loomine õnnestus.");
             } else if (arr[0].equalsIgnoreCase("getBalance")) {
                 BigDecimal x = accountBalanceMap.get(arr[1]);
                 if (x == null) {
@@ -79,12 +80,11 @@ public class Lesson4 {
                 } else {
                     accountBalanceMap.put(arr[1], (y.subtract(x, mc)));
                     accountBalanceMap.put(arr[2], (z.add(x, mc)));
-                    System.out.println("Makse õnnestus. Te kandsite " + x + " eurot kontolt " + y + " kontole " + z + ".");
+                    System.out.println("Makse õnnestus. Te kandsite " + x + " eurot kontolt " + arr[1] + " kontole " + arr[2] + ".");
                 }
-
             }
             else {
-                System.out.println("Unknown command");
+                System.out.println("Unknown command.");
             }
         }
     }

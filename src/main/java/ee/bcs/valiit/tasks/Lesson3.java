@@ -2,10 +2,11 @@ package ee.bcs.valiit.tasks;
 
 public class Lesson3 {
     public static void main(String[] args) {
-        nthPower(new int[]{1, 2, 3, 4, 5}, 5);
+        //nthPower(new int[]{1, 2, 3, 4, 5}, 5);
         //sum(new int[] {1,2,3});
         //isPrime(9);
         //reverseString("Tere");
+        toCamelCase("tere-kuidas-läheb");
 
     }
 
@@ -88,8 +89,26 @@ public class Lesson3 {
     }
 
     public static int howOld(final String herOld) {
-        String vanusString = herOld.substring(0,1);
+        String vanusString = herOld.substring(0, 1);
         int vanus = Integer.parseInt(vanusString);
         return vanus;
+    }
+
+
+    public static void toCamelCase(String s) {
+        String arr[] = s.split("-");
+        int arrayLength = arr.length;
+        boolean isUpperCase = Character.isUpperCase(s.charAt(0));
+        if (isUpperCase) {
+            for (int i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].substring(0, 1).toUpperCase() + arr[i].substring(1).toLowerCase();
+                System.out.print(arr[i]);
+            }
+        } else {
+            for (int i = 1; i < arr.length; i++) {
+                arr[i] = arr[i].substring(0, 1).toUpperCase() + arr[i].substring(1).toLowerCase();
+                System.out.print(arr[i]);
+            }
+        }
     }
 }
