@@ -10,27 +10,22 @@ public class Lesson2 {
     // TODO loo 10 elemendile täisarvude massiv
     // TODO loe sisse konsoolist 10 täisarvu
     // TODO trüki arvud välja vastupidises järiekorras
-    public static void exercise1() {
-        int[] array = new int[10];
-        Scanner scanner = new Scanner(System.in);
-        for (int i = 0; i < 10; i++) {
-            System.out.println("Sisesta number: ");
-            array[i] = scanner.nextInt();
+    public static int[] exercise1(int[] array) {
+        int[] resultArray = new int[array.length];
+        for (int i = array.length - 1; i >= 0; i--) {
+            resultArray[array.length - 1 - i] = array[i];
         }
-        for (int i = 9; i >= 0; i--) {
-            System.out.print(array[i] + " ");
-        }
+        return resultArray;
     }
 
     // TODO prindi välja x esimest paaris arvu
     // Näide:
     // Sisend 5
     // Väljund 2 4 6 8 10
-    public static void exercise2(int x) {
+    public static int exercise2(int x) {
         for (int i = 1; i <= x; i++) {
-            System.out.print(i * 2 + " ");
-        }
-
+            int tulemus = (i * 2);
+        } return 0;
     }
 
     // TODO trüki välja korrutustabel mis on x ühikut lai ja y ühikut kõrge
@@ -44,7 +39,7 @@ public class Lesson2 {
     // TODO 3 trüki seda sama rida y korda
     // TODO 4 Kuskile võiks kirjutada System.out.println(),
     //  et saada taebli kuju
-    // TODO 5 võrdle ridu. Kas on mingi seaduspärasus ridade vahel,
+    // TODO 5 võrdle ridu. Kas on mingi seaduspärasus ridade vahel, //tagasta 2d array veebi või stringina
     // mis on ja mis võiks olla. Äkki tuleb mõni idee
     public static void exercise3(int x, int y) {
         for (int j = 1; j <= y; j++) {
