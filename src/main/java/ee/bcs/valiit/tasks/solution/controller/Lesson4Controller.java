@@ -1,93 +1,110 @@
 package ee.bcs.valiit.tasks.solution.controller;
 
 import ee.bcs.valiit.tasks.Lesson3Hard;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.HashMap;
+import java.util.Map;
 
-// teha eraldi teenused if statementidega (getbalance jne) igale teenusele url. ntks public void createaccount (). ehk bank/cerateaccount\accountnr=ee123. siis public bigdecimal accountbalance - accountbalance?accountnr=ee123. public void depositmoney jne.
-// bank/transferMoney?fromACCOUNT=EE123&toAccount jne
 @RestController
 public class Lesson4Controller {
-    HashMap<String, BigDecimal> accountBalanceMap = new HashMap<>();
 
-    @GetMapping("createAccount")
-    public String createAccount(@RequestParam("accountNr") String accountNr) {
-        accountBalanceMap.put(accountNr, BigDecimal.ZERO);
-        return ("Konto nr " + accountNr + " loomine õnnestus.");
+    @Autowired
+    private NamedParameterJdbcTemplate jdbcTemplate;
+
+
+    @PostMapping("createCustomer")
+    public void createCustomer(@RequestBody Bank bank) {
+        String sql2= "INSERT INTO customers (customerid, eesnimi, perekonnanimi) VALUES (:idParameter, :eesnimiParameter, :perekonnanimiParameter)";
+        Map<String, Object> paramMap2 = new HashMap<>();
+        paramMap2.put("idParameter", bank.getId());
+        paramMap2.put("eesnimiParameter", bank.getEesnimi());
+        paramMap2.put("perekonnanimiParameter", bank.getPerekonnanimi());
+        jdbcTemplate.update(sql2, paramMap2);
+    }
+
+    @PostMapping("createAccount")
+    public void createAccount(@RequestBody Bank bank) {
+        String sql = "INSERT INTO accounts (account, balance) VALUES (:accountParameter, :balanceParameter)";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("accountParameter", bank.getAccount());
+        paramMap.put("balanceParameter", BigDecimal.ZERO);
+        jdbcTemplate.update(sql, paramMap);
     }
 
     @GetMapping("getBalance")
-    public String getBalance(@RequestParam("accountNr") String accountNr) {
-        BigDecimal x = accountBalanceMap.get(accountNr);
-        if (x == null) {
-            return ("Sellist kontot ei ole.");
-        } else {
-            return ("Teie konto balanss on " + x + " eurot.");
-        }
+    public BigDecimal getBalance(@RequestBody Bank bank) {
+        //BigDecimal x = accountBalanceMap.get(accountNr);
+        String sql = "SELECT balance FROM accounts WHERE account = :accountParameter";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("accountParameter", bank.getAccount());
+        return jdbcTemplate.queryForObject(sql, paramMap, BigDecimal.class);
     }
 
-    @GetMapping("depositMoney")
-    public String depositMoney(@RequestParam("accountNr") String accountNr, @RequestParam("sum") String sum) {
-        BigDecimal x = new BigDecimal(sum);
-        BigDecimal y = accountBalanceMap.get(accountNr);
-        MathContext mc = new MathContext(4);
-        int comp = (x.compareTo(BigDecimal.ZERO));
-        if (comp == -1) {
-            return ("Kontole ei saa negatiivset summat lisada.");
-        } else if (y == null) {
-            return ("Sellist kontot ei ole.");
-        } else {
-            accountBalanceMap.put(accountNr, (x.add(y, mc)));
-            return ("Teie kontole lisati " + x + " eurot.");
-        }
+    @PutMapping("depositMoney")
+    public void depositMoney(@RequestBody Bank bank) {
+        String sql = "SELECT balance FROM accounts WHERE account = :accountNumber";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("accountNumber", bank.getAccount());
+        BigDecimal balance = jdbcTemplate.queryForObject(sql, paramMap, BigDecimal.class);
+
+                BigDecimal newBalance = balance.add(bank.getAmount());
+
+        String sql2 = "UPDATE accounts SET balance = :balance WHERE account = :accountNumber";
+        Map<String, Object> paramMap2 = new HashMap();
+        paramMap2.put("accountNumber", bank.getAccount());
+        paramMap2.put("balance", newBalance);
+        jdbcTemplate.update(sql2, paramMap2);
     }
 
-    @GetMapping("withdrawMoney")
-    public String withdrawMoney(@RequestParam("accountNr") String accountNr, @RequestParam("sum") String sum) {
-        BigDecimal x = new BigDecimal(sum); // raha väärtus
-        BigDecimal y = accountBalanceMap.get(accountNr); // konto nr millelt võetakse
-        MathContext mc = new MathContext(4);
-        int comp = (x.compareTo(BigDecimal.ZERO));
-        int comp2 = (x.compareTo(y));
-        if (comp == -1) {
-            return ("Kontolt ei saa negatiivset summat välja võtta.");
-        } else if (y == null) {
-            return ("Sellist kontot ei ole.");
-        } else if (comp2 == 1) {
-            return ("Kontolt ei saa nii palju raha välja võtta- rahalised vahendid puuduvad.");
-        } else {
-            accountBalanceMap.put(accountNr, (y.subtract(x, mc)));
-            return ("Teie kontolt võeti välja " + x + " eurot.");
-        }
+    @PutMapping("withdrawMoney")
+    public void withdrawMoney(@RequestBody Bank bank) {
+        String sql = "SELECT balance FROM accounts WHERE account = :accountNumber";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("accountNumber", bank.getAccount());
+        BigDecimal balance = jdbcTemplate.queryForObject(sql, paramMap, BigDecimal.class);
+
+        BigDecimal newBalance = balance.subtract(bank.getAmount());
+
+        String sql2 = "UPDATE accounts SET balance = :balance WHERE account = :accountNumber";
+        Map<String, Object> paramMap2 = new HashMap();
+        paramMap2.put("accountNumber", bank.getAccount());
+        paramMap2.put("balance", newBalance);
+        jdbcTemplate.update(sql2, paramMap2);
     }
 
-    @GetMapping("transfer")
-    public String transfer(@RequestParam("fromAccount") String fromAccount, @RequestParam("toAccount") String toAccount, @RequestParam("sum") String sum) {
-        BigDecimal x = new BigDecimal(sum); //number, mida hakatakse liitma ühele kontole ja lahutama teiselt
-        BigDecimal y = accountBalanceMap.get(fromAccount); // konto, millelt raha maha võetakse
-        BigDecimal z = accountBalanceMap.get(toAccount); // konto, millele raha liidetakse
-        MathContext mc = new MathContext(4);
-        int comp = (x.compareTo(BigDecimal.ZERO));
-        int comp2 = (x.compareTo(y));
-        if (comp == -1) {
-            return ("Negatiivset summat ei ole võimalik kanda.");
-        } else if (y == null) {
-            return ("Kontot, millelt soovite raha kanda, ei ole olemas.");
-        } else if (z == null) {
-            return ("Kontot, millele soovite raha kanda, ei ole olemas.");
-        } else if (comp2 == 1) {
-            return ("Kontolt ei saa nii palju raha edastada- rahalised vahendid puuduvad.");
-        } else {
-            accountBalanceMap.put(fromAccount, (y.subtract(x, mc)));
-            accountBalanceMap.put(toAccount, (z.add(x, mc)));
-            return ("Makse õnnestus. Te kandsite " + x + " eurot kontolt " + fromAccount + " kontole " + toAccount + ".");
-        }
+    @PutMapping("transfer")
+    public void transfer(@RequestBody Transferbank transferbank) {
+        String sql = "SELECT balance FROM accounts WHERE account = :fromaccountNumber";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("fromaccountNumber", transferbank.getFromaccount());
+        BigDecimal balance = jdbcTemplate.queryForObject(sql, paramMap, BigDecimal.class);
+
+        BigDecimal subtractBalance = balance.subtract(transferbank.getTransferamount());
+
+        String sql2 = "UPDATE accounts SET balance = :balance WHERE account = :fromaccountNumber";
+        Map<String, Object> paramMap2 = new HashMap();
+        paramMap2.put("fromaccountNumber", transferbank.getFromaccount());
+        paramMap2.put("balance", subtractBalance);
+        jdbcTemplate.update(sql2, paramMap2);
+
+        String sql3 = "SELECT balance FROM accounts WHERE account = :toaccountNumber";
+        Map<String, Object> paramMap3 = new HashMap<>();
+        paramMap3.put("toaccountNumber", transferbank.getToaccount());
+        BigDecimal balance2 = jdbcTemplate.queryForObject(sql3, paramMap3, BigDecimal.class);
+
+        BigDecimal addBalance = balance2.add(transferbank.getTransferamount());
+
+        String sql4 = "UPDATE accounts SET balance = :balance WHERE account = :toaccountNumber";
+        Map<String, Object> paramMap4 = new HashMap();
+        paramMap4.put("toaccountNumber", transferbank.getToaccount());
+        paramMap4.put("balance", addBalance);
+        jdbcTemplate.update(sql4, paramMap4);
     }
+ // to do- pane kontode tabel klientide tabelisse. keyks jääb tolle tabeli id.
 }
 
