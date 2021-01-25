@@ -1,12 +1,14 @@
 package ee.bcs.valiit.tasks;
 
+import java.util.ArrayList;
+
 public class Lesson3 {
     public static void main(String[] args) {
         //nthPower(new int[]{1, 2, 3, 4, 5}, 5);
         //sum(new int[] {1,2,3});
         //isPrime(9);
         //reverseString("Tere");
-        toCamelCase("tere-kuidas-läheb");
+        toCamelCase("the_Stealth_Warrior");
 
     }
 
@@ -72,10 +74,11 @@ public class Lesson3 {
         }
         if (!kasOn) {
             System.out.println(x + " on primaararv.");
-        return true; }
-        else {
+            return true;
+        } else {
             System.out.println(x + " ei ole primaararv.");
-        return false;}
+            return false;
+        }
     }
 
 
@@ -97,20 +100,27 @@ public class Lesson3 {
     }
 
 
-    public static void toCamelCase(String s) {
-        String arr[] = s.split("-");
+    public static String toCamelCase(String s) {
+        String arr[] = s.split("-|_");
         int arrayLength = arr.length;
         boolean isUpperCase = Character.isUpperCase(s.charAt(0));
+        ArrayList<String> test = new ArrayList<String>();
+        StringBuffer sb = new StringBuffer();
         if (isUpperCase) {
             for (int i = 0; i < arr.length; i++) {
                 arr[i] = arr[i].substring(0, 1).toUpperCase() + arr[i].substring(1).toLowerCase();
-                System.out.print(arr[i]);
+                return (arr[i]);
             }
-        } else {
-            for (int i = 1; i < arr.length; i++) {
+        } else test.add(arr[0]);
+        {
+            for (int i = 1; i < arrayLength; i++) {
                 arr[i] = arr[i].substring(0, 1).toUpperCase() + arr[i].substring(1).toLowerCase();
-                System.out.print(arr[i]);
+                test.add(arr[i]);
             }
+            for (String a : test) {
+                sb.append(a);
+            }
+            return sb.toString();
         }
     }
 }
