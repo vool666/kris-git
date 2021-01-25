@@ -102,7 +102,6 @@ public class Lesson3 {
 
     public static String toCamelCase(String s) {
         String arr[] = s.split("-|_");
-        int arrayLength = arr.length;
         boolean isUpperCase = Character.isUpperCase(s.charAt(0));
         ArrayList<String> test = new ArrayList<String>();
         StringBuffer sb = new StringBuffer();
@@ -113,7 +112,7 @@ public class Lesson3 {
             }
         } else test.add(arr[0]);
         {
-            for (int i = 1; i < arrayLength; i++) {
+            for (int i = 1; i < arr.length; i++) {
                 arr[i] = arr[i].substring(0, 1).toUpperCase() + arr[i].substring(1).toLowerCase();
                 test.add(arr[i]);
             }
