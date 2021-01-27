@@ -51,14 +51,10 @@ public class Lesson4Controller {
         bankService.transfer(transferbank);
     }
 
-//    @GetMapping("getAll")
-//    private class ObjectRowMapper implements RowMapper<Bank> {
-//        @Override
-//        public Bank mapRow(ResultSet resultSet, int i) throws SQLException {
-//            Bank bank = new Bank();
-//            bank.setName(resultSet.getString("account"));
-//            return bank;
-//        }
-//    }
+    @GetMapping("getHistory")
+    public void getHistory(@RequestBody Bank bank) {
+        bankService.
+    }
+
 }
 

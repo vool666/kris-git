@@ -4,22 +4,32 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="1" author="Siim">
-        <createTable tableName="author">
-            <column name="id" type="int" autoIncrement="true">
+    
+    <changeSet id="26-01-2021" author="Kris">
+        <createTable tableName="customers">
+            <column name="customerid" type="int">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="text"/>
+            <column name ="eesnimi" type="text"/>
+            <column name ="perekonnanimi" type="text"/>
+            <column name ="accountid" type="int"/>
         </createTable>
 
-        <createTable tableName="book">
-            <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true"/>
+        <createTable tableName="accounts">
+            <column name ="balance" type="numeric(10,2)"/>
+            <column name="accountid" type="int">
+            <constraints primaryKey="true" foreignKeyName="fk_customer_accounts" references="customers(customerid)"/>
             </column>
-            <column name="name" type="text"/>
-            <column name="author_id" type="int">
-                <constraints foreignKeyName="fk_book_author" references="author(id)"/>
-            </column>
+            <column name ="customerid" type="int"/>
+        </createTable>
+
+        <createTable tableName="transactionhistory">
+            <column name="fromaccountid" type="int"/>
+            <column name="toaccountid" type="int"/>
+            <column name ="deposit" type="numeric(10,2)"/>
+            <column name ="withdraw" type="numeric(10,2)"/>
+            <column name ="transfer" type="numeric(10,2)"/>
+            <column name ="time" type="timestamp"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>
