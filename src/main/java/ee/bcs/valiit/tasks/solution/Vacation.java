@@ -11,7 +11,7 @@ public class Vacation {
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
-    private Employee employee;
+    private SolutionEmployee2 solutionEmployee2;
 
     private LocalDate beginDate;
 
@@ -24,12 +24,12 @@ public class Vacation {
         return this;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public SolutionEmployee2 getEmployee() {
+        return solutionEmployee2;
     }
 
-    public Vacation setEmployee(Employee employee) {
-        this.employee = employee;
+    public Vacation setEmployee(SolutionEmployee2 solutionEmployee2) {
+        this.solutionEmployee2 = solutionEmployee2;
         return this;
     }
 

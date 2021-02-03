@@ -1,16 +1,17 @@
 package ee.bcs.valiit.tasks.solution.repository;
 
-import ee.bcs.valiit.tasks.solution.controller.Bank;
-import ee.bcs.valiit.tasks.solution.controller.MyExeption;
-import ee.bcs.valiit.tasks.solution.controller.ObjectRowMapper;
-import ee.bcs.valiit.tasks.solution.controller.Transferbank;
+import ee.bcs.valiit.tasks.BankController;
+import ee.bcs.valiit.tasks.solution.SolutionEmployee;
+import ee.bcs.valiit.tasks.solution.controller.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -27,13 +28,19 @@ public class BankRepository {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public void createCustomerRepo(Bank bank) {
-        String sql2 = "INSERT INTO customers (customerid, accountid, eesnimi, perekonnanimi) VALUES (:customeridParameter, :accountidParameter, :eesnimiParameter, :perekonnanimiParameter)";
+        String sql2 = "INSERT INTO customers (customerid, accountid, eesnimi, perekonnanimi, username, password) VALUES (:customeridParameter, :accountidParameter, :eesnimiParameter, :perekonnanimiParameter, :usernameParameter, :passwordParameter)";
         Map<String, Object> paramMap2 = new HashMap<>();
         paramMap2.put("customeridParameter", bank.getCustomerid());
         paramMap2.put("accountidParameter", bank.getAccountid());
         paramMap2.put("eesnimiParameter", bank.getEesnimi());
         paramMap2.put("perekonnanimiParameter", bank.getPerekonnanimi());
+        paramMap2.put("usernameParameter", bank.getUsername());
+        paramMap2.put("passwordParameter", passwordEncoder.encode(bank.getPassword()));
+
         try {
             jdbcTemplate.update(sql2, paramMap2);
         } catch (Exception e) {
@@ -54,7 +61,18 @@ public class BankRepository {
         }
     }
 
-    public BigDecimal getBalanceRepo(Bank bank) {
+    public BigDecimal getBalanceRepo(int accountid) {
+        String sql = "SELECT balance FROM accounts WHERE accountid = :accountidParameter";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("accountidParameter", accountid);
+        try {
+            return jdbcTemplate.queryForObject(sql, paramMap, BigDecimal.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public BigDecimal getBalanceRepo2(Bank bank) {
         String sql = "SELECT balance FROM accounts WHERE accountid = :accountidParameter";
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("accountidParameter", bank.getAccountid());
@@ -63,6 +81,13 @@ public class BankRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    public String findByUserName(String username) {
+        String sql = "SELECT password FROM customers WHERE username = :usernameParameter";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("usernameParameter", username);
+        return jdbcTemplate.queryForObject(sql, paramMap, String.class);
     }
 
     public void depositMoneyUpdateRepo(Bank bank, BigDecimal newBalance) {
@@ -78,7 +103,7 @@ public class BankRepository {
     }
 
     public void depositMoneyHistory(Bank bank) {
-        String sql = "INSERT INTO transactionhistory (toaccountid, deposit, time) VALUES (:idParameter, :depositParameter, :timeParameter)";
+        String sql = "INSERT INTO transactionhistory (accountid, deposit, time) VALUES (:idParameter, :depositParameter, :timeParameter)";
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("idParameter", bank.getAccountid());
         paramMap.put("depositParameter", bank.getAmount());
@@ -98,10 +123,10 @@ public class BankRepository {
     }
 
     public void withdrawMoneyHistory(Bank bank) {
-        String sql = "INSERT INTO transactionhistory (fromaccountid, deposit, time) VALUES (:idParameter, :depositParameter, :timeParameter)";
+        String sql = "INSERT INTO transactionhistory (accountid, withdraw, time) VALUES (:idParameter, :withdrawParameter, :timeParameter)";
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("idParameter", bank.getAccountid());
-        paramMap.put("depositParameter", bank.getAmount());
+        paramMap.put("withdrawParameter", bank.getAmount());
         paramMap.put("timeParameter", LocalDateTime.now());
         jdbcTemplate.update(sql, paramMap);
     }
@@ -148,31 +173,36 @@ public class BankRepository {
     }
 
     public void transferMoneyHistory(Transferbank transferbank) {
-        String sql = "INSERT INTO transactionhistory (fromaccountid, toaccountid, transfer, time) VALUES (:fromidParameter, :toidParameter, :transferParameter, :timeParameter)";
+        String sql = "INSERT INTO transferhistory (fromaccountid, toaccountid, amount, time) VALUES (:fromaccountidParameter, :toaccountidParameter, :amountParameter, :timeParameter)";
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("fromidParameter", transferbank.getFromaccount());
-        paramMap.put("toidParameter", transferbank.getToaccount());
-        paramMap.put("transferParameter", transferbank.getTransferamount());
+        paramMap.put("fromaccountidParameter", transferbank.getFromaccount());
+        paramMap.put("toaccountidParameter", transferbank.getToaccount());
+        paramMap.put("amountParameter", transferbank.getTransferamount());
         paramMap.put("timeParameter", LocalDateTime.now());
         jdbcTemplate.update(sql, paramMap);
     }
 
-//    public <HistoryList> getHistoryRepo(Bank bank) {
-//        String sql = "SELECT * FROM transactionhistory WHERE fromaccountid = :accountidParameter";
-//        Map<String, Object> paramMap = new HashMap<>();
-//        paramMap.put("accountidParameter", bank.getAccountid());
-//        return jdbcTemplate.queryForObject(sql, paramMap, <HistoryList>.class);
-//        }
-//    }
 
-//    public List<Bank> findByAccountId(int id) {
-//        String sql = "SELECT * FROM transactionhistory";
-//        List<Bank> list = new ArrayList<>();
-//        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
-//        for (Map row : rows) {
-//            Bank obj = new Bank();
-//        }
-//    }
+    public List<Bank> transactionHistoryRepo() {
+        String sql = "SELECT * FROM transactionhistory";
+        List<Bank> result = jdbcTemplate.query(sql, new HashMap<>(), new ObjectRowMapper());
+        return result;
+    }
+
+    private static class ObjectRowMapper implements RowMapper<Bank> {
+        @Override
+        public Bank mapRow(ResultSet resultSet, int i) throws SQLException {
+            Bank bank = new Bank();
+            bank.setAccountid(resultSet.getInt("accountid"));
+            bank.setAmount(resultSet.getBigDecimal("deposit"));
+            bank.setAmount(resultSet.getBigDecimal("withdraw"));
+//            bank.setTime(resultSet.getObject("time", LocalDateTime.class));
+            return bank;
+        }
+//controller peab andma sisse kogu info. services teed selle kaheks eraldi ja repo peab callima ainult ühte.
+//
+//
 
 
+    }
 }

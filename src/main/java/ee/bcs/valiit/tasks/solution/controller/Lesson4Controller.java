@@ -1,6 +1,8 @@
 package ee.bcs.valiit.tasks.solution.controller;
 
+import ee.bcs.valiit.tasks.BankController;
 import ee.bcs.valiit.tasks.Lesson3Hard;
+import ee.bcs.valiit.tasks.solution.SolutionEmployee;
 import ee.bcs.valiit.tasks.solution.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,7 +13,9 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,6 +23,7 @@ public class Lesson4Controller {
 
     @Autowired
     private BankService bankService;
+    private List<Bank> bankList = new ArrayList<>();
 
 
     @PostMapping("createCustomer")
@@ -31,9 +36,10 @@ public class Lesson4Controller {
         bankService.createAccount(bank);
     }
 
+    @CrossOrigin
     @GetMapping("getBalance")
-    public void getBalance(@RequestBody Bank bank) {
-        bankService.getBalance(bank);
+    public BigDecimal getBalance(@RequestParam("accountid") int accountid) {
+        return bankService.getBalance(accountid);
     }
 
     @PutMapping("depositMoney")
@@ -46,15 +52,18 @@ public class Lesson4Controller {
         bankService.withdrawMoney(bank);
     }
 
+
     @PutMapping("transfer")
     public void transfer(@RequestBody Transferbank transferbank) {
         bankService.transfer(transferbank);
     }
 
-    @GetMapping("getHistory")
-    public void getHistory(@RequestBody Bank bank) {
-        bankService.
+    @GetMapping("transactionhistory")
+    public List<Bank> transactionHistory() {
+        return bankService.transactionHistory();
     }
+
+
 
 }
 

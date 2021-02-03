@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Employee {
+public class SolutionEmployee2 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,14 +13,14 @@ public class Employee {
     private String address;
     private String phone;
 
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "solutionEmployee2")
     private List<Vacation> vacations;
 
     public String getName() {
         return name;
     }
 
-    public Employee setName(String name) {
+    public SolutionEmployee2 setName(String name) {
         this.name = name;
         return this;
     }
@@ -29,7 +29,7 @@ public class Employee {
         return address;
     }
 
-    public Employee setAddress(String address) {
+    public SolutionEmployee2 setAddress(String address) {
         this.address = address;
         return this;
     }
@@ -38,7 +38,7 @@ public class Employee {
         return id;
     }
 
-    public Employee setId(Integer id) {
+    public SolutionEmployee2 setId(Integer id) {
         this.id = id;
         return this;
     }
@@ -47,7 +47,7 @@ public class Employee {
         return phone;
     }
 
-    public Employee setPhone(String phone) {
+    public SolutionEmployee2 setPhone(String phone) {
         this.phone = phone;
         return this;
     }
@@ -56,7 +56,7 @@ public class Employee {
         return vacations;
     }
 
-    public Employee setVacations(List<Vacation> vacations) {
+    public SolutionEmployee2 setVacations(List<Vacation> vacations) {
         this.vacations = vacations;
         return this;
     }
