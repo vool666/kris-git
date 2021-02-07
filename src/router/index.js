@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-
+import Register from '../views/Register.vue'
+import Bank from '../views/Bank.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -19,7 +20,19 @@ const routes = [
     component: function () {
       return import(/* webpackChunkName: "about" */ '../views/About.vue')
     }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
+
+  },
+  {
+    path: '/Bank',
+    name: 'Bank',
+    component: Bank
   }
+
 ]
 
 const router = new VueRouter({
