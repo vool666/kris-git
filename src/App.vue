@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/register">Register</router-link> |
-      <router-link to="/register">Bank</router-link>
+      <b-nav tabs>
+        <b-nav-item to ="/Bank" exact exact-active-class="active">Bank functions</b-nav-item>
+        <b-nav-item to ="/Transactionhistory" exact exact-active-class="active">Transaction history</b-nav-item>
+      </b-nav>
     </div>
     <router-view/>
   </div>

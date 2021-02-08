@@ -1,6 +1,14 @@
 <template>
   <b-container>
-    <b-row align-v="center">
+
+    <div>
+<!--      <b-nav tabs>-->
+<!--        <b-nav-item active>Bank functions</b-nav-item>-->
+<!--        <b-nav-item>Transactions history</b-nav-item>-->
+<!--      </b-nav>-->
+    </div>
+
+    <b-row align-v="center" class="pt-5">
          <b-col>
            <b-card
                title="Create Customer"
@@ -12,26 +20,26 @@
                class="mb-2"
           >
              <b-card-text>
-               Customer ID : <input v-model="customers.customerid"> <br>
-               Account ID : <input v-model="customers.accountid"> <br>
-               Eesnimi : <input v-model="customers.eesnimi"> <br>
-               Perekonnanimi : <input v-model="customers.perekonnanimi"> <br>
-               Username : <input v-model="customers.username"> <br>
-               Password : <input v-model="customers.password">
+               <b-form-input v-model="customers.customerid" placeholder="Customer ID"></b-form-input>
+               <b-form-input v-model="customers.accountid" placeholder="Account ID"></b-form-input>
+               <b-form-input v-model="customers.eesnimi" placeholder="Eesnimi"></b-form-input>
+               <b-form-input v-model="customers.perekonnanimi" placeholder="Perekonnanimi"></b-form-input>
+               <b-form-input v-model="customers.username" placeholder="Username"></b-form-input>
+               <b-form-input v-model="customers.password" placeholder="Password"></b-form-input>
              </b-card-text>
              <b-button variant="primary" v-on:click="createCustomerHtml()">Execute</b-button>
            </b-card>
            <b-card
                title="Create Account"
-               img-src="https://picsum.photos/1600/200/?image=1042"
+               img-src="https://picsum.photos/1600/200/?image=1040"
                bg-variant="dark"
                text-variant="white"
                tag="article"
                style="max-width:30rem"
                class="mb-2">
              <b-card-text>
-               Customer ID : <input v-model="accounts.customerid"> <br>
-               Account ID : <input v-model="accounts.accountid">
+               <b-form-input v-model="accounts.customerid" placeholder="Customer ID"></b-form-input>
+               <b-form-input v-model="accounts.accountid" placeholder="Account ID"></b-form-input>
              </b-card-text>
              <b-button variant="primary" v-on:click="createAccountHtml()">Execute</b-button>
            </b-card>
@@ -44,7 +52,7 @@
                style="max-width:30rem"
                class="mb-2">
              <b-card-text>
-               Account ID : <input v-model="balance.accountid">
+               <b-form-input v-model="balance.accountid" placeholder="Account ID"></b-form-input>
              </b-card-text>
              <b-button variant="primary" v-on:click="getBalanceHtml()">Execute</b-button>
            </b-card>
@@ -52,46 +60,46 @@
          <b-col>
            <b-card
                title="Deposit money"
-               img-src="https://picsum.photos/1600/200/?image=1042"
+               img-src="https://picsum.photos/1600/200/?image=144"
                bg-variant="dark"
                text-variant="white"
                tag="article"
                style="max-width:30rem"
                class="mb-2">
              <b-card-text>
-               Account ID : <input v-model="deposit.accountid"> <br>
-               Deposit amount : <input v-model="deposit.amount">
+               <b-form-input v-model="deposit.accountid" placeholder="Account ID"></b-form-input>
+               <b-form-input v-model="deposit.amount" placeholder="Deposit amount"></b-form-input>
              </b-card-text>
              <b-button variant="primary" v-on:click="depositMoneyHtml()">Execute</b-button>
            </b-card>
 
            <b-card
                title="Withdraw money"
-               img-src="https://picsum.photos/1600/200/?image=135"
+               img-src="https://picsum.photos/1600/200/?image=112"
                bg-variant="dark"
                text-variant="white"
                tag="article"
                style="max-width:30rem"
                class="mb-2">
              <b-card-text>
-               Account ID : <input v-model="withdraw.accountid"> <br>
-               Withdraw amount : <input v-model="withdraw.amount">
+               <b-form-input v-model="withdraw.accountid" placeholder="Account ID"></b-form-input>
+               <b-form-input v-model="withdraw.amount" placeholder="Withdraw amount"></b-form-input>
              </b-card-text>
              <b-button variant="primary" v-on:click="withdrawMoneyHtml()">Execute</b-button>
            </b-card>
 
            <b-card
                title="Transfer money"
-               img-src="https://picsum.photos/1600/200/?image=135"
+               img-src="https://picsum.photos/1600/200/?image=108"
                bg-variant="dark"
                text-variant="white"
                tag="article"
                style="max-width:30rem"
                class="mb-2">
              <b-card-text>
-               From account ID : <input v-model="transfer.accountid"> <br>
-               To account ID : <input v-model="transfer.accountid"> <br>
-               Transfer amount : <input v-model="transfer.amount">
+               <b-form-input v-model="transfer.fromaccountid" placeholder="From account ID"></b-form-input>
+               <b-form-input v-model="transfer.toaccountid" placeholder="To account ID"></b-form-input>
+               <b-form-input v-model="transfer.amount" placeholder="Transfer amount"></b-form-input>
              </b-card-text>
              <b-button variant="primary" v-on:click="transferMoneyHtml()">Execute</b-button>
            </b-card>
@@ -209,8 +217,8 @@ h1 {
   color: #2c3e50;
 }
 
-#bank-carousel {
-  background-color: #023e8a;
+.mb-2 {
+  font-family: "Myriad Pro";
 }
 
 </style>

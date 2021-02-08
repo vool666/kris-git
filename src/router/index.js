@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Register from '../views/Register.vue'
 import Bank from '../views/Bank.vue'
+import Transactionhistory from "@/views/Transactionhistory";
 Vue.use(VueRouter)
 
 const routes = [
@@ -31,6 +32,11 @@ const routes = [
     path: '/Bank',
     name: 'Bank',
     component: Bank
+  },
+  {
+    path: '/Transactionhistory',
+    name: 'Transactionhistory',
+    component: Transactionhistory
   }
 
 ]
