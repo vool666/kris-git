@@ -3,7 +3,7 @@
     <b-container>
       <b-row>
         <b-col>
-          <b-table striped hover :transactionhistory="transactionhistory">
+          <b-table striped hover :items="transactionhistory">
           </b-table>
         </b-col>
         <b-col>
